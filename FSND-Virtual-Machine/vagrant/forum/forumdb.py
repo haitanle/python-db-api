@@ -2,6 +2,7 @@
 
 import datetime
 import psycopg2
+import bleach
 
 # POSTS = [("This is the first post.", datetime.datetime.now())]
 database = "forum"
@@ -24,7 +25,7 @@ def add_post(content):
   cursor = conn.cursor()
 
   cursor.execute("insert into posts (content, time ) VALUES (%s, %s)",
-  								(content, datetime.datetime.now()))
+  								(bleach.clean(content), datetime.datetime.now()))
 
   conn.commit()
   conn.close()
