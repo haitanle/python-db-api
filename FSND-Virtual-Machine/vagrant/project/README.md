@@ -6,6 +6,22 @@ This is a python script that will query a newspaper's database and produce a tex
 
 Fork repo from git@github.com:haitanle/python-db-api.git
 
+## Dependencies
+
+psycopg2 - python db-api to connect to Postgres database
+```sh
+pip install psycopg2
+```
+
+## Data Preparation
+
+Download newsdata.sql data file at https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsdata.zip
+
+Load the data into the Postgres database with command
+```sh
+psql -d news -f newsdata.sql
+``` 
+
 ## Running
 
 ssh into vagrant:
