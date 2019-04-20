@@ -1,4 +1,4 @@
-# !/usr/bin/env python2
+# !/usr/bin/env python
 
 import psycopg2
 
@@ -30,9 +30,12 @@ for x in range(3):
 
 message += "\n2. Who are the most popular article authors of all time? \n\n"
 # query to get top authors
-cur.execute("select c.name,  a.viewCount \
-    from top3 a join articles b on a.article_slug = b.slug \
-    join authors c on b.author = c.id;")
+cur.execute("select c.name, count(*) from (\
+    select substring(path from position('article/' in path)+8) \
+    as article_slug from log) as a \
+    join articles b on a.article_slug = b.slug \
+    join authors c on b.author = c.id \
+    group by c.name order by count desc;")
 
 top_authors = cur.fetchall()
 
