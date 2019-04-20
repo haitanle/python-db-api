@@ -45,17 +45,17 @@ for author in top_authors:
 
 
 message += "\n3. On which days did more than 1% \
-    of requests lead to errors? \n\n"
+of requests lead to errors? \n\n"
 
 # create view for log data
-cur.execute("create or replace view logDate \
-    as select  date(time) as date, status, count(*) \
+cur.execute("create or replace view logdate \
+    as select date(time) as date, status, count(*) \
     from log group by date, status;")
 
 # query to get day's error percentage
 cur.execute("select date, error_percent from \
     (select a.date, cast( \
-        (cast(b.count as numeric)/a.count) *100 as numeric(6,2))\
+        (cast(b.count as numeric)/(b.count+a.count)) *100 as numeric(6,2))\
         as error_percent \
         from logdate as a, logdate as b \
         where a.date = b.date and a.status < b.status order by a.date ) \

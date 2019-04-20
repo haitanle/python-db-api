@@ -11,6 +11,6 @@ Rudolf von Treppenwitz -- 423457 views
 Anonymous Contributor -- 170098 views 
 Markoff Chaney -- 84557 views 
 
-3. On which days did more than 1%     of requests lead to errors? 
+3. On which days did more than 1% of requests lead to errors? 
 
-2016-07-17 -- 2.32% errors
+2016-07-17 -- 2.26% errors
