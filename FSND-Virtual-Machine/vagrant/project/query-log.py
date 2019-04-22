@@ -10,14 +10,14 @@ message = "1. What are the most popular three articles of all time? \n\n"
 
 # create top3 views
 cur.execute("create or replace view top3 as \
-	select path as article_slug, count(*) as viewCount \
-	from log where path like '%article%' \
-	group by path order by viewCount desc;")
+    select path as article_slug, count(*) as viewCount \
+    from log where path like '%article%' \
+    group by path order by viewCount desc;")
 
 # query to get top3 title
 cur.execute("select b.title, a.viewCount from top3 a \
-	join articles b \
-	on a.article_slug = concat('/article/', b.slug);")
+    join articles b \
+    on a.article_slug = concat('/article/', b.slug);")
 
 top_titles = cur.fetchall()
 
