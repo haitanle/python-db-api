@@ -1,5 +1,7 @@
 # !/usr/bin/env python
 
+if __name__== "__main__":
+
 import psycopg2
 
 conn = psycopg2.connect("dbname=news")
