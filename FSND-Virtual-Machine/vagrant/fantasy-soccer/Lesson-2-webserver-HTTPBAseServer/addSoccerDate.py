@@ -49,6 +49,22 @@ session = DBSession()
 # session.commit()
 
 
+city = Team(name="Manchester City", year_founded=1988)
+
+session.add(city)
+
+session.add(Player(name="Aquero", position="striker", age=33, team=city ))
+session.add(Player(name="De Buyne", position="mid-fielder", age=30, team=city ))
+session.add(Player(name="Silva", position="mid-fielder", age=35, team=city ))
+session.add(Player(name="Jesus", position="striker", age=40, team=city ))
+session.add(Player(name="Stones", position="defender", age=32, team=city ))
+session.add(Player(name="Laporte", position="defender", age=32, team=city ))
+session.add(Player(name="Sterling", position="mid-fielder", age=32, team=city ))
+
+session.commit()
+
+
+
 
 #READ 
 
