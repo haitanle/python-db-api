@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, flash
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from databaseTeamSetup import Base, Team, Player
@@ -40,10 +40,12 @@ def add_player_to(team_id):
 		newPlayer = Player(team_id=team_id, name=playerName, position = playerPosition, age=playerAge)
 		session.add(newPlayer)
 		session.commit()
+		flash('Goal! New player added! %s'%(playerName))
 
 		return redirect(url_for('team_roster',team_id=team_id), code=303)
 
 if __name__ == '__main__':
+	app.secret_key = 'secretsecret'
 	print('startin server...')
 	app.debug = True
 	app.run(host='0.0.0.0', port=8000)

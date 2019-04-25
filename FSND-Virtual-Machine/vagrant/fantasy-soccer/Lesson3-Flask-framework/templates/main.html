@@ -1,10 +1,15 @@
 <html>
+<head>
+	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+</head>
 <body>
 	<h1>Champions League!</h1>
+
 	{% for team in teams %}
 		(id:<a href="{{url_for('team_roster',team_id=team.id)}}"">{{team.id}}</a>)
 		{{team.name}}
 		{{team.year_founded}}<br>
 	{% endfor %}
+
 </body>
 </html>

@@ -4,6 +4,16 @@
 <h1>{{team.name}}</h1>
 <h2>establised: {{team.year_founded}}</h2>
 
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <ul>
+    {% for message in messages %}
+      <li><strong>{{ message }}</strong></li>
+    {% endfor %}
+   	</ul>
+  {% endif %}
+{% endwith %}
+
 <h2>Roster</h2>
 
 {% for player in players %}
