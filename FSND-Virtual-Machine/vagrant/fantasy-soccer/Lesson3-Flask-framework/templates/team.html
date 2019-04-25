@@ -1,6 +1,6 @@
 <html>
 <body>
-<a href="/">Main</a>
+<a href='{{url_for('show_teams')}}'>Main</a>
 <h1>{{team.name}}</h1>
 <h2>establised: {{team.year_founded}}</h2>
 
@@ -11,6 +11,19 @@
 	<p>{{player.position}}</p>
 	<p>{{player.age}}</p>
 {% endfor %}
+
+<h2>Add player</h2>
+<form action='/{{team.id}}/add_player' method='post' enctype='multipart/form-data'>
+	Name:
+	<input type='text' name='name' ><br>
+	Position: 
+	<input type='text' name='position'><br>
+	Age: 
+	<input type='number' name='age'><br>
+	<br>
+	<input type='submit' value='Create'>
+	<button type='reset' value='Reset'>Reset</button>
+</form>
 
 </body>
 </html>
