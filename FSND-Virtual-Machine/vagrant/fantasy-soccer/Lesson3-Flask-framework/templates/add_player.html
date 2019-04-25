@@ -1,0 +1,18 @@
+<html>
+<body>
+<h2>Add player</h2>
+
+<h2>{{team.name}}</h2>
+<form action='/{{team.id}}/add_player' method='post' enctype='multipart/form-data'>
+	Name:
+	<input type='text' name='name' ><br>
+	Position: 
+	<input type='text' name='position'><br>
+	Age: 
+	<input type='number' name='age'><br>
+	<br>
+	<input type='submit' value='Create'>
+	<button type='reset' value='Reset'>Reset</button>
+</form>
+</body>
+</html>

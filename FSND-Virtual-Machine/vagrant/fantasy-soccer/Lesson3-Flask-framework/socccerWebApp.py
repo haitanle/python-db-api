@@ -27,8 +27,12 @@ def team_roster(team_id):
 	players = session.query(Player).filter_by(team_id=team_id).all()
 	return render_template('team.html', team=team, players=players)
 
-@app.route('/<int:team_id>/add_player', methods=['POST'])
+@app.route('/<string:team_id>/add_player', methods=['GET','POST'])
 def add_player_to(team_id):
+	if request.method == 'GET':
+		team = session.query(Team).filter_by(id=team_id).one()
+		return render_template('add_player.html', team=team)
+
 	if request.method == 'POST':
 		print('adding player...')
 
