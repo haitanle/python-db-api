@@ -25,6 +25,19 @@ class Handler_class(BaseHTTPRequestHandler):
 				teams_display+=('<a href="/%s/edit">Edit</a><br /><a href="#">Delete</a><br />'%team.id)
 
 			output+=teams_display
+
+			form = "<br><br><h2>Add new team</h2><form action='/add_team' method='post' enctype='multipart/form-data'> \
+					Name:\
+					<input type='text' name='name' ><br> \
+					year founded: \
+					<input type='number' name='year_founded'><br> \
+					<br><br> \
+					<input type='submit' value='Create'> \
+					<button type='reset' value='Reset'>Reset</button> \
+					</form>"
+
+			output+=form
+
 			output+="</body></html>"
 			self.wfile.write(output)
 		elif self.path.endswith("/edit"):
@@ -54,8 +67,7 @@ class Handler_class(BaseHTTPRequestHandler):
 
 	def do_POST(self):
 		ctype, pdict = cgi.parse_header(self.headers.getheader('Content-type'))
-		print('here')
-		if ctype == 'multipart/form-data':
+		if ctype == 'multipart/form-data' and self.path.endswith("edit_done"):
 			fields = cgi.parse_multipart(self.rfile, pdict)
 
 			teamId = self.path.split("/")[1]
@@ -73,6 +85,19 @@ class Handler_class(BaseHTTPRequestHandler):
 			self.send_header('Location','/')
 			self.end_headers()
 
+		if ctype == 'multipart/form-data' and self.path.endswith("add_team"):
+			fields = cgi.parse_multipart(self.rfile, pdict)
+
+			newName = fields.get('name')[0]
+			newYear = fields.get('year_founded')[0]
+
+			team = Team(name=newName, year_founded=newYear)
+			session.add(team)
+			session.commit()
+
+			self.send_response(303)
+			self.send_header('Location','/')
+			self.end_headers()
 
 
 if __name__== '__main__':
