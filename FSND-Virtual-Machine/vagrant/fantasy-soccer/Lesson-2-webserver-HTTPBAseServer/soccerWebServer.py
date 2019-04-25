@@ -22,7 +22,7 @@ class Handler_class(BaseHTTPRequestHandler):
 			teams_display = ''
 			for team in teams: 
 				teams_display+=("%s %s %s <br>"%(team.id, team.name, team.year_founded))
-				teams_display+=('<a href="/%s/edit">Edit</a><br /><a href="#">Delete</a><br />'%team.id)
+				teams_display+=('<a href="/%s/edit">Edit</a><br /><a href="/%s/delete">Delete</a><br />'%(team.id, team.id))
 
 			output+=teams_display
 
@@ -60,8 +60,19 @@ class Handler_class(BaseHTTPRequestHandler):
 					<input type='submit' value='Edit'> \
 					<a href='/'>Cancel</a> \
 					</form></body></html>"%(team.id, team.id, team.name, team.year_founded)
-
 			self.wfile.write(output)
+
+		elif self.path.endswith("/delete"):
+
+			teamID = self.path.split("/")[1]
+			team = session.query(Team).filter_by(id=teamID).one()
+			session.delete(team)
+			session.commit()
+
+			self.send_response(303)
+			self.send_header('Location','/')
+			self.end_headers()
+
 		else:
 			self.send_error(404, 'File Not Found: %s' % self.path)
 
