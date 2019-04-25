@@ -12,15 +12,30 @@ class Handler_class(BaseHTTPRequestHandler):
 	def do_GET(self):
 		if self.path.endswith("/"):
 			self.send_response(200)
-			self.send_header('Content-type','text/plain; charset=utf-8')
+			self.send_header('Content-type','text/html; charset=utf-8')
 			self.end_headers()
 
 			teams = session.query(Team).all()
-			output = ''
+			output = "<html><body><h1>Champions League!</h1>"
+			teams_display = ''
 			for team in teams: 
 				print team.name 
-				output+=(team.name+'\n') # or output as HTML
+				teams_display+=(team.name+'<br />')
+				teams_display+=('<a href="/%s/edit">Edit</a><br /><a href="#">Delete</a><br />'%team.id)
+
+			output+=teams_display
+			output+="</body></html>"
 			self.wfile.write(output)
+		elif self.path.endswith("/edit"):
+			self.send_response(200)
+			self.send_header('Content-type','text/html; charset=utf-8')
+			self.end_headers()
+
+			teamID = self.path.split("/")[1]
+			team = session.query(Team).filter_by(id=teamID).one()
+			output = "teamID:%s  teamName:%s  year:%s"%(team.id, team.name, team.year_founded)
+			self.wfile.write(output)
+
 
 if __name__== '__main__':
 	server_address = ('', 8000)
