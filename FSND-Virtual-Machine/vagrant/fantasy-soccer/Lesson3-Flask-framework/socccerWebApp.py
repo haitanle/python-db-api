@@ -1,9 +1,27 @@
 from flask import Flask 
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from databaseTeamSetup import Base, Team, Player
+
 app = Flask(__name__)
+
+#add sqlalchemy CRUD
+engine = create_engine('sqlite:///fantasySoccerTeam.db')
+Base.metadata_bind = engine
+DBSession = sessionmaker(bind=engine)
+session = DBSession()
 
 @app.route('/')
 def soccer_time():
-	return 'Hello Soccer!'
+	team = session.query(Team).first()
+	print(team.name)
+	players = session.query(Player).filter_by(team_id=team.id).all()
+	output = ''
+	for player in players: 
+		print(player.name)
+		output+=('<h2>%s</h2>'%(player.name))
+		output+='<p>position: %s</p><p>age: %s</p>'%(player.position, player.age)
+	return output
 
 if __name__ == '__main__':
 	print('startin server...')
