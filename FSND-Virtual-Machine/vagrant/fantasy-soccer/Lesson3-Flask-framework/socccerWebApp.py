@@ -1,4 +1,4 @@
-from flask import Flask 
+from flask import Flask, render_template
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from databaseTeamSetup import Base, Team, Player
@@ -21,16 +21,10 @@ def show_teams():
 	return output
 
 @app.route('/team/<int:team_id>/')
-def soccer_time(team_id):
-	# team = session.query(Team).first()
-	# print(team.name)
+def team_roster(team_id):
+	team = session.query(Team).filter_by(id=team_id).one()
 	players = session.query(Player).filter_by(team_id=team_id).all()
-	output = ''
-	for player in players: 
-		print(player.name)
-		output+=('<h2>%s</h2>'%(player.name))
-		output+='<p>position: %s</p><p>age: %s</p>'%(player.position, player.age)
-	return output
+	return render_template('team.html', team=team, players=players)
 
 if __name__ == '__main__':
 	print('startin server...')

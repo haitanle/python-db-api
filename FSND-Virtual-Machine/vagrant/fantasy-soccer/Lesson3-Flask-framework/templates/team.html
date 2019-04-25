@@ -1,0 +1,16 @@
+<html>
+<body>
+<a href="/">Main</a>
+<h1>{{team.name}}</h1>
+<h2>establised: {{team.year_founded}}</h2>
+
+<h2>Roster</h2>
+
+{% for player in players %}
+	<h3>{{player.name}}</h3>
+	<p>{{player.position}}</p>
+	<p>{{player.age}}</p>
+{% endfor %}
+
+</body>
+</html>
