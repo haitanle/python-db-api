@@ -12,10 +12,19 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 @app.route('/')
-def soccer_time():
-	team = session.query(Team).first()
-	print(team.name)
-	players = session.query(Player).filter_by(team_id=team.id).all()
+def show_teams():
+
+	teams = session.query(Team).all()
+	output = "<h1>Champions League!</h1><p>Go to url: /team/{id}/ to see your team:</p>"
+	for team in teams: 
+		output+=("(id: %s) %s %s <br>"%(team.id, team.name, team.year_founded))
+	return output
+
+@app.route('/team/<int:team_id>/')
+def soccer_time(team_id):
+	# team = session.query(Team).first()
+	# print(team.name)
+	players = session.query(Player).filter_by(team_id=team_id).all()
 	output = ''
 	for player in players: 
 		print(player.name)
