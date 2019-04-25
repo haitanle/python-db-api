@@ -3,6 +3,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from databaseTeamSetup import *
 
+import cgi
+
 engine = create_engine('sqlite:///fantasySoccerTeam.db')
 Base.metadata_bind = engine
 DBSession = sessionmaker(bind=engine)
@@ -19,8 +21,7 @@ class Handler_class(BaseHTTPRequestHandler):
 			output = "<html><body><h1>Champions League!</h1>"
 			teams_display = ''
 			for team in teams: 
-				print team.name 
-				teams_display+=(team.name+'<br />')
+				teams_display+=("%s %s %s <br>"%(team.id, team.name, team.year_founded))
 				teams_display+=('<a href="/%s/edit">Edit</a><br /><a href="#">Delete</a><br />'%team.id)
 
 			output+=teams_display
@@ -33,8 +34,45 @@ class Handler_class(BaseHTTPRequestHandler):
 
 			teamID = self.path.split("/")[1]
 			team = session.query(Team).filter_by(id=teamID).one()
-			output = "teamID:%s  teamName:%s  year:%s"%(team.id, team.name, team.year_founded)
+			#output = "teamID:%s  teamName:%s  year:%s"%(team.id, team.name, team.year_founded)
+
+			output ="<html><body><h1>Update</h1><form action='/%s/edit_done' method='post' enctype='multipart/form-data'> \
+					Id: \
+					<input type='number' name='id' value=%s disabled><br> \
+					Name:\
+					<input type='text' name='name' value=%s><br> \
+					year founded: \
+					<input type='number' name='year_founded' value=%s><br> \
+					<br><br> \
+					<input type='submit' value='Edit'> \
+					<a href='/'>Cancel</a> \
+					</form></body></html>"%(team.id, team.id, team.name, team.year_founded)
+
 			self.wfile.write(output)
+		else:
+			self.send_error(404, 'File Not Found: %s' % self.path)
+
+	def do_POST(self):
+		ctype, pdict = cgi.parse_header(self.headers.getheader('Content-type'))
+		print('here')
+		if ctype == 'multipart/form-data':
+			fields = cgi.parse_multipart(self.rfile, pdict)
+
+			teamId = self.path.split("/")[1]
+			newName = fields.get('name')[0]
+			newYear = fields.get('year_founded')[0]
+
+			team = session.query(Team).filter_by(id=teamId).one()
+			team.name = newName
+			team.year_founded = newYear
+
+			session.add(team)
+			session.commit()
+
+			self.send_response(303)
+			self.send_header('Location','/')
+			self.end_headers()
+
 
 
 if __name__== '__main__':
