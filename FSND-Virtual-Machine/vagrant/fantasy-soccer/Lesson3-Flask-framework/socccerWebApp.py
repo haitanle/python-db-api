@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect, flash
+from flask import Flask, render_template, url_for, request, redirect, flash, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from databaseTeamSetup import Base, Team, Player
@@ -11,6 +11,17 @@ engine = create_engine('sqlite:///fantasySoccerTeam.db')
 Base.metadata_bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
+
+@app.route('/team/<int:team_id>/players/JSON')
+def teamRosterJSON(team_id):
+	team = session.query(Team).filter_by(id=team_id).one()
+	players = session.query(Player).filter_by(team_id=team_id).all()
+	#return jsonify(Players=[player.serialize for player in players])   didn't work
+	playerList = []
+	for player in players:
+		array = {'name': player.name, "position": player.position, "age": player.age, "team":team.name}
+		playerList.append(array)
+	return jsonify(Players=playerList)
 
 @app.route('/')
 def show_teams():

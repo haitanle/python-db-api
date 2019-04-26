@@ -25,6 +25,15 @@ class Player(Base):
 	position = Column(String(50), nullable=False)
 	age = Column(Integer)
 
+	@property
+	def tan(self):
+		return {
+			'name': self.name,
+			'id': self.id,
+			'position': self.position,
+			'age': self.age
+		}
+	
 
 #end of file
 engine = create_engine('sqlite:///fantasySoccerTeam.db')
